@@ -12,6 +12,9 @@ const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 bot.setWebHook('https://exchangebot-1.onrender.com/webhook');
 
+// Webhook URL - Vercel uchun
+const webhookUrl = `${process.env.VERCEL_URL}/api/webhook`;
+
 // MongoDB ulanish
 mongoose.connect(process.env.MONGODB_URI, { 
     useNewUrlParser: true, 
