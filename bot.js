@@ -1,6 +1,13 @@
 require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const mongoose = require('mongoose');
+const express = require('express');
+const app = express(); // Eksikse bu satırı ekleyin
+
+// Diğer require'lar...
+app.use(express.json()); // Artık "app" tanımlı olduğu için hata vermez
+
+// Route'lar ve diğer kodlar...
 
 // Bot token
 const token = process.env.TELEGRAM_BOT_TOKEN;
