@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 // Bot token
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
+bot.setWebHook('https://exchangebot-1.onrender.com/webhook');
 
 // MongoDB ulanish
 mongoose.connect(process.env.MONGODB_URI, { 
