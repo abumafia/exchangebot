@@ -7,8 +7,6 @@ const app = express(); // Eksikse bu satırı ekleyin
 // Diğer require'lar...
 app.use(express.json()); // Artık "app" tanımlı olduğu için hata vermez
 
-// Route'lar ve diğer kodlar...
-
 // Bot token
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
@@ -1237,14 +1235,31 @@ bot.on('reply_to_message', async (msg) => {
     adminState.announcementPhoto = null;
 });
 
-// Botni ishga tushirish
-console.log('Bot ishga tushdi...');
+// Webhook ni sozlash
+bot.setWebHook(webhookUrl)
+  .then(() => console.log('Webhook muvaffaqiyatli o\'rnatildi:', webhookUrl))
+  .catch(err => console.error('Webhook o\'rnatishda xato:', err));
 
-// Xatoliklarni qayta ishlash
-bot.on('polling_error', (error) => {
-    console.error('Polling xatosi:', error);
+// Express middleware
+app.use(express.json());
+
+// Webhook endpoint
+app.post('/api/webhook', (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
 });
 
+// Serverni ishga tushirish (Vercel uchun aslida kerak emas)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server ${PORT} portida ishga tushdi`);
+});
+
+// Xatoliklarni qayta ishlash
 process.on('unhandledRejection', (error) => {
-    console.error('Qayta ishlanmagan rad etish:', error);
+  console.error('Qayta ishlanmagan rad etish:', error);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Qayta ishlanmagan istisno:', error);
 });
